@@ -40,3 +40,23 @@ module.exports.getUserWorkouts = (req, res) => {
     })
     .catch((error) => errorHandler(error, req, res));
 };
+
+//update workout
+
+module.exports.updateUserworkout = (req, res) => {
+  let updatedWorkout = {
+    name: req.body.name,
+    duration: req.body.duration,
+  };
+
+  return Workout.findByIdAndUpdate(req.params.id, updatedWorkout, {
+    returnDocument: "after",
+  }).then((workout) => {
+    if (workout) {
+      res.status(200).send({
+        message: "Workout updated sucessfully",
+        updatedWorkout: workout,
+      });
+    }
+  });
+};

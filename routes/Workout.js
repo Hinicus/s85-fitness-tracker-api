@@ -11,4 +11,7 @@ router.post("/addWorkout", verify, workoutController.addWorkout);
 //get workout
 router.get("/getMyWorkouts", verify, workoutController.getUserWorkouts);
 
+//update workout
+router.patch("/updateWorkout/:id", verify, workoutController.updateUserworkout);
+
 module.exports = router;
