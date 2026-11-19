@@ -70,10 +70,10 @@ module.exports.deleteUserWorkout = (req, res) => {
   return Workout.findOneAndDelete({ _id: req.params.id, userId: req.user.id })
     .then((workout) => {
       if (!workout) {
-        res.status(400).send("Workout does not exist");
+        return res.status(400).send({ error: "Workout does not exist" });
       }
 
-      res.status(200).send({
+      return res.status(200).send({
         message: "Workout deleted successfully",
       });
     })
@@ -96,7 +96,7 @@ module.exports.completeWorkout = (req, res) => {
           updatedWorkout: workout,
         });
       } else {
-        res.status(400).send({ message: "Workout does not exist" });
+        res.status(400).send({ error: "Workout does not exist" });
       }
     })
     .catch((error) => errorHandler(error, req, res));
