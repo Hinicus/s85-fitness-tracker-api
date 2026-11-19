@@ -1,15 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+require("dotenv").config();
 //server
 const app = express();
 // port
 const port = 4000;
 
 //connect to db
-mongoose.connect(
-  "mongodb+srv://admin:admin1234@b645-bulaong.rkrbcvy.mongodb.net/FitnessTracker?appName=B645-Bulaong",
-);
+mongoose.connect(process.env.MONGO_DB);
 
 //check possible events / monitor db connection
 let db = mongoose.connection;
