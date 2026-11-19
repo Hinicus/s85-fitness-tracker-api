@@ -14,4 +14,10 @@ router.get("/getMyWorkouts", verify, workoutController.getUserWorkouts);
 //update workout
 router.patch("/updateWorkout/:id", verify, workoutController.updateUserworkout);
 
+//delete workout
+router.delete(
+  "/deleteWorkout/:id",
+  verify,
+  workoutController.deleteUserWorkout,
+);
 module.exports = router;

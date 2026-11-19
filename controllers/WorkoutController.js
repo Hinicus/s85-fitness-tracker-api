@@ -42,7 +42,6 @@ module.exports.getUserWorkouts = (req, res) => {
 };
 
 //update workout
-
 module.exports.updateUserworkout = (req, res) => {
   let updatedWorkout = {
     name: req.body.name,
@@ -58,5 +57,18 @@ module.exports.updateUserworkout = (req, res) => {
         updatedWorkout: workout,
       });
     }
+  });
+};
+
+//delete workout
+module.exports.deleteUserWorkout = (req, res) => {
+  return Workout.findByIdAndDelete(req.params.id).then((workout) => {
+    if (!workout) {
+      res.status(400).send("Workout does not exist");
+    }
+
+    res.status(200).send({
+      message: "Workout deleted successfully",
+    });
   });
 };
