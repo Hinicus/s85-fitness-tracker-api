@@ -43,28 +43,31 @@ module.exports.getUserWorkouts = (req, res) => {
 
 //update workout
 module.exports.updateUserworkout = (req, res) => {
-  let updatedWorkout = {
+  const updatedWorkout = {
     name: req.body.name,
     duration: req.body.duration,
   };
 
-  return Workout.findByIdAndUpdate(req.params.id, updatedWorkout, {
-    returnDocument: "after",
-  })
+  return Workout.findOneAndUpdate(
+    { _id: req.params.id, userId: req.user.id },
+    updatedWorkout,
+    { returnDocument: "after" },
+  )
     .then((workout) => {
-      if (workout) {
-        res.status(200).send({
-          message: "Workout updated sucessfully",
-          updatedWorkout: workout,
-        });
+      if (!workout) {
+        return res.status(404).send({ error: "Workout not found" });
       }
+      return res.status(200).send({
+        message: "Workout updated successfully",
+        updatedWorkout: workout,
+      });
     })
     .catch((error) => errorHandler(error, req, res));
 };
 
 //delete workout
 module.exports.deleteUserWorkout = (req, res) => {
-  return Workout.findByIdAndDelete(req.params.id)
+  return Workout.findOneAndDelete({ _id: req.params.id, userId: req.user.id })
     .then((workout) => {
       if (!workout) {
         res.status(400).send("Workout does not exist");
@@ -79,8 +82,8 @@ module.exports.deleteUserWorkout = (req, res) => {
 
 //complete workout
 module.exports.completeWorkout = (req, res) => {
-  return Workout.findByIdAndUpdate(
-    req.params.id,
+  return Workout.findOneAndUpdate(
+    { _id: req.params.id, userId: req.user.id },
     { status: "completed" },
     {
       returnDocument: "after",
@@ -93,7 +96,7 @@ module.exports.completeWorkout = (req, res) => {
           updatedWorkout: workout,
         });
       } else {
-        res.status(400).send(false);
+        res.status(400).send({ message: "Workout does not exist" });
       }
     })
     .catch((error) => errorHandler(error, req, res));
