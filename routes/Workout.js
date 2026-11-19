@@ -20,4 +20,11 @@ router.delete(
   verify,
   workoutController.deleteUserWorkout,
 );
+
+//update status workout
+router.patch(
+  "/completeWorkoutStatus/:id",
+  verify,
+  workoutController.completeWorkout,
+);
 module.exports = router;

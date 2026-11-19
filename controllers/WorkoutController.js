@@ -50,25 +50,51 @@ module.exports.updateUserworkout = (req, res) => {
 
   return Workout.findByIdAndUpdate(req.params.id, updatedWorkout, {
     returnDocument: "after",
-  }).then((workout) => {
-    if (workout) {
-      res.status(200).send({
-        message: "Workout updated sucessfully",
-        updatedWorkout: workout,
-      });
-    }
-  });
+  })
+    .then((workout) => {
+      if (workout) {
+        res.status(200).send({
+          message: "Workout updated sucessfully",
+          updatedWorkout: workout,
+        });
+      }
+    })
+    .catch((error) => errorHandler(error, req, res));
 };
 
 //delete workout
 module.exports.deleteUserWorkout = (req, res) => {
-  return Workout.findByIdAndDelete(req.params.id).then((workout) => {
-    if (!workout) {
-      res.status(400).send("Workout does not exist");
-    }
+  return Workout.findByIdAndDelete(req.params.id)
+    .then((workout) => {
+      if (!workout) {
+        res.status(400).send("Workout does not exist");
+      }
 
-    res.status(200).send({
-      message: "Workout deleted successfully",
-    });
-  });
+      res.status(200).send({
+        message: "Workout deleted successfully",
+      });
+    })
+    .catch((error) => errorHandler(error, req, res));
+};
+
+//complete workout
+module.exports.completeWorkout = (req, res) => {
+  return Workout.findByIdAndUpdate(
+    req.params.id,
+    { status: "completed" },
+    {
+      returnDocument: "after",
+    },
+  )
+    .then((workout) => {
+      if (workout) {
+        res.status(200).send({
+          message: "Workout status updated succesfully",
+          updatedWorkout: workout,
+        });
+      } else {
+        res.status(400).send(false);
+      }
+    })
+    .catch((error) => errorHandler(error, req, res));
 };
